@@ -5,7 +5,7 @@ import "../styles/globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "PetSoft",
+  title: "PetSoft-Pet daycare software",
   description: "take care of people's pets responsibly with PetSoft",
 };
 
