@@ -10,7 +10,7 @@ export default function Layout({
   return (
     <>
       <BackgroundPattern />
-      <div className="mx-auto max-w-[1050px] px-4">
+      <div className="mx-auto flex min-h-screen max-w-[1050px] flex-col px-4">
         <AppHeader />
         {children}
         <AppFooter />
