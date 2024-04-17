@@ -31,7 +31,7 @@ export default function Home() {
           <Button
             asChild
             className="h-10 rounded-full px-6"
-            variant={"secondary"}
+            variant="secondary"
           >
             <Link href={"/login"}>Get Started</Link>
           </Button>
