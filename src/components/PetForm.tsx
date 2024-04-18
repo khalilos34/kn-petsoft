@@ -1,10 +1,10 @@
 "use client";
-import { FormEvent } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Textarea } from "./ui/textarea";
 import { usePetContext } from "@/lib/hooks";
+import { addNewPet } from "@/actions/actions";
 
 const PetForm = ({
   actionTyp,
@@ -13,30 +13,10 @@ const PetForm = ({
   actionTyp: "add" | "edit";
   closeDialog: () => void;
 }) => {
-  const { handleAddPet, selectedPet, handleEditPet } = usePetContext();
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const pet = {
-      name: formData.get("name") as string,
-      age: +(formData.get("age") as string),
-      ownerName: formData.get("ownerName") as string,
-      notes: formData.get("notes") as string,
-      imageUrl:
-        (formData.get("imageUrl") as string) ||
-        "https://bytegrad.com/course-assets/react-nextjs/pet-placeholder.png",
-    };
-    if (actionTyp === "add") {
-      handleAddPet(pet);
-      closeDialog();
-    } else {
-      handleEditPet(selectedPet!.id, pet);
-      closeDialog();
-    }
-  };
+  const { selectedPet } = usePetContext();
 
   return (
-    <form className="flex flex-col" onSubmit={handleSubmit}>
+    <form className="flex flex-col" action={addNewPet}>
       <div className="space-y-3">
         <div className="space-y-1">
           <Label htmlFor="name">Name</Label>
