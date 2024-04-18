@@ -16,7 +16,13 @@ const PetForm = ({
   const { selectedPet } = usePetContext();
 
   return (
-    <form className="flex flex-col" action={addNewPet}>
+    <form
+      className="flex flex-col"
+      action={async (formData) => {
+        await addNewPet(formData);
+        closeDialog();
+      }}
+    >
       <div className="space-y-3">
         <div className="space-y-1">
           <Label htmlFor="name">Name</Label>
