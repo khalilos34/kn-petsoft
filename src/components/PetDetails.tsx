@@ -24,7 +24,7 @@ const PetDetails = () => {
         <h2 className="ml-5 text-3xl font-semibold leading-5">
           {selectedPet?.name}
         </h2>
-        <div className="ml-auto space-x-2">
+        <div className="ml-auto flex space-x-2">
           <PetButton actionType="edit">Edit</PetButton>
           <PetButton actionType="checkout">Checkout</PetButton>
         </div>
