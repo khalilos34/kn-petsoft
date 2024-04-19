@@ -17,3 +17,7 @@ export const addNewPet = async (formData: FormData) => {
   });
   revalidatePath("/app", "layout");
 };
+export const checkOutPet = async (id: string) => {
+  await prisma.pet.delete({ where: { id } });
+  revalidatePath("/app", "layout");
+};

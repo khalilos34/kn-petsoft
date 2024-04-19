@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import PetForm from "./PetForm";
 import { useState } from "react";
+import CheckoutButton from "./CheckoutButton";
 type PetButtonProps = {
   actionType: "add" | "edit" | "checkout";
   children?: React.ReactNode;
@@ -17,11 +18,7 @@ type PetButtonProps = {
 const PetButton = ({ actionType, children }: PetButtonProps) => {
   const [isDialogOPen, setIsDialogOpen] = useState(false);
   if (actionType === "checkout") {
-    return (
-      <Button className="h-10 rounded-full px-6" variant="secondary">
-        {children}
-      </Button>
-    );
+    return <CheckoutButton>{children}</CheckoutButton>;
   }
   return (
     <Dialog open={isDialogOPen} onOpenChange={setIsDialogOpen}>
