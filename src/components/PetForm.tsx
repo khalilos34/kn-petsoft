@@ -4,7 +4,7 @@ import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Textarea } from "./ui/textarea";
 import { usePetContext } from "@/lib/hooks";
-import { addNewPet } from "@/actions/actions";
+import { addNewPet, updatePet } from "@/actions/actions";
 
 const PetForm = ({
   actionType,
@@ -19,7 +19,11 @@ const PetForm = ({
     <form
       className="flex flex-col"
       action={async (formData) => {
-        await addNewPet(formData, actionType, selectedPet?.id);
+        if (actionType == "add") {
+          await addNewPet(formData);
+        } else {
+          updatePet(selectedPet!.id, formData);
+        }
         closeDialog();
       }}
     >
