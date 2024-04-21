@@ -7,10 +7,10 @@ import { usePetContext } from "@/lib/hooks";
 import { addNewPet } from "@/actions/actions";
 
 const PetForm = ({
-  actionTyp,
+  actionType,
   closeDialog,
 }: {
-  actionTyp: "add" | "edit";
+  actionType: "add" | "edit";
   closeDialog: () => void;
 }) => {
   const { selectedPet } = usePetContext();
@@ -19,7 +19,7 @@ const PetForm = ({
     <form
       className="flex flex-col"
       action={async (formData) => {
-        await addNewPet(formData);
+        await addNewPet(formData, actionType, selectedPet?.id);
         closeDialog();
       }}
     >
@@ -31,7 +31,7 @@ const PetForm = ({
             type="text"
             name="name"
             required
-            defaultValue={actionTyp === "edit" ? selectedPet?.name : ""}
+            defaultValue={actionType === "edit" ? selectedPet?.name : ""}
           />
         </div>
         <div className="space-y-1">
@@ -41,7 +41,7 @@ const PetForm = ({
             type="number"
             name="age"
             required
-            defaultValue={actionTyp === "edit" ? selectedPet?.age : ""}
+            defaultValue={actionType === "edit" ? selectedPet?.age : ""}
           />
         </div>
         <div className="space-y-1">
@@ -51,7 +51,7 @@ const PetForm = ({
             type="text"
             name="ownerName"
             required
-            defaultValue={actionTyp === "edit" ? selectedPet?.ownerName : ""}
+            defaultValue={actionType === "edit" ? selectedPet?.ownerName : ""}
           />
         </div>
         <div className="space-y-1">
@@ -60,7 +60,7 @@ const PetForm = ({
             id="imageUrl"
             type="text"
             name="imageUrl"
-            defaultValue={actionTyp === "edit" ? selectedPet?.imageUrl : ""}
+            defaultValue={actionType === "edit" ? selectedPet?.imageUrl : ""}
           />
         </div>
         <div className="space-y-1">
@@ -69,12 +69,12 @@ const PetForm = ({
             id="notes"
             name="notes"
             required
-            defaultValue={actionTyp === "edit" ? selectedPet?.notes : ""}
+            defaultValue={actionType === "edit" ? selectedPet?.notes : ""}
           />
         </div>
       </div>
       <Button type="submit" className="mt-5 self-end rounded-full">
-        {actionTyp === "add" ? "Add a new pet" : "Edit pet"}
+        {actionType === "add" ? "Add a new pet" : "Edit pet"}
       </Button>
     </form>
   );
