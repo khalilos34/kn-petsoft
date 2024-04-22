@@ -5,6 +5,8 @@ import { Label } from "./ui/label";
 import { Textarea } from "./ui/textarea";
 import { usePetContext } from "@/lib/hooks";
 import { addNewPet, updatePet } from "@/actions/actions";
+import PetButtonState from "./PetButtonState";
+import { toast } from "sonner";
 
 const PetForm = ({
   actionType,
@@ -20,9 +22,15 @@ const PetForm = ({
       className="flex flex-col"
       action={async (formData) => {
         if (actionType == "add") {
-          await addNewPet(formData);
+          const error = await addNewPet(formData);
+          if (error) {
+            toast.warning(error.message);
+          }
         } else {
-          updatePet(selectedPet!.id, formData);
+          const error = await updatePet(selectedPet!.id, formData);
+          if (error) {
+            toast.warning(error.message);
+          }
         }
         closeDialog();
       }}
@@ -77,9 +85,7 @@ const PetForm = ({
           />
         </div>
       </div>
-      <Button type="submit" className="mt-5 self-end rounded-full">
-        {actionType === "add" ? "Add a new pet" : "Edit pet"}
-      </Button>
+      <PetButtonState actionType={actionType} />
     </form>
   );
 };
