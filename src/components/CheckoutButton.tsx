@@ -5,6 +5,7 @@ import { checkOutPet } from "@/actions/actions";
 
 const CheckoutButton = ({ children }: { children: React.ReactNode }) => {
   const { selectedPet } = usePetContext();
+
   return (
     <form action={() => checkOutPet(selectedPet!.id)}>
       <Button

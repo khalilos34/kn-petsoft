@@ -1,6 +1,7 @@
 "use server";
 
 import prisma from "@/lib/db";
+import { sleep } from "@/lib/utils";
 import { revalidatePath } from "next/cache";
 
 export const addNewPet = async (formData: FormData) => {
@@ -25,8 +26,13 @@ export const addNewPet = async (formData: FormData) => {
   }
 };
 export const checkOutPet = async (id: string) => {
-  await prisma.pet.delete({ where: { id } });
-  revalidatePath("/app", "layout");
+  await sleep(4000);
+  try {
+    await prisma.pet.delete({ where: { id } });
+    revalidatePath("/app", "layout");
+  } catch (error) {
+    return { message: "could not delete the pet" };
+  }
 };
 
 export const updatePet = async (petId: string, formData: FormData) => {
