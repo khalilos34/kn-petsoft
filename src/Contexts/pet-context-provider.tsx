@@ -1,7 +1,8 @@
 "use client";
 import { addNewPet } from "@/actions/actions";
-import prisma from "@/lib/db";
-import { Pet } from "@/lib/types";
+import { PetInputs } from "@/lib/types";
+import { Pet } from "@prisma/client";
+
 import { createContext, useState } from "react";
 type IPetContext = {
   pets: Pet[];
