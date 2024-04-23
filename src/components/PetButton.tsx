@@ -10,6 +10,7 @@ import {
 import PetForm from "./PetForm";
 import { useState } from "react";
 import CheckoutButton from "./CheckoutButton";
+import { flushSync } from "react-dom";
 type PetButtonProps = {
   actionType: "add" | "edit" | "checkout";
   children?: React.ReactNode;
@@ -39,7 +40,9 @@ const PetButton = ({ actionType, children }: PetButtonProps) => {
         </DialogHeader>
         <PetForm
           actionType={actionType}
-          closeDialog={() => setIsDialogOpen(false)}
+          closeDialog={() => {
+            flushSync(() => setIsDialogOpen(false));
+          }}
         />
       </DialogContent>
     </Dialog>

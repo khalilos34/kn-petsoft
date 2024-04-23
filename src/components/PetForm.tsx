@@ -21,6 +21,7 @@ const PetForm = ({
     <form
       className="flex flex-col"
       action={async (formData) => {
+        closeDialog();
         const petData = {
           name: formData.get("name") as string,
           age: +(formData.get("age") as string),
@@ -35,7 +36,6 @@ const PetForm = ({
         } else {
           await handleUpdatePet(petData, selectedPet!.id);
         }
-        closeDialog();
       }}
     >
       <div className="space-y-3">
