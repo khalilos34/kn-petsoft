@@ -15,22 +15,25 @@ const PetForm = ({
   actionType: "add" | "edit";
   closeDialog: () => void;
 }) => {
-  const { selectedPet } = usePetContext();
+  const { selectedPet, handleAddNewPet, handleUpdatePet } = usePetContext();
 
   return (
     <form
       className="flex flex-col"
       action={async (formData) => {
+        const petData = {
+          name: formData.get("name") as string,
+          age: +(formData.get("age") as string),
+          ownerName: formData.get("ownerName") as string,
+          notes: formData.get("notes") as string,
+          imageUrl:
+            (formData.get("imageUrl") as string) ||
+            "https://bytegrad.com/course-assets/react-nextjs/pet-placeholder.png",
+        };
         if (actionType == "add") {
-          const error = await addNewPet(formData);
-          if (error) {
-            toast.warning(error.message);
-          }
+          await handleAddNewPet(petData);
         } else {
-          const error = await updatePet(selectedPet!.id, formData);
-          if (error) {
-            toast.warning(error.message);
-          }
+          await handleUpdatePet(petData, selectedPet!.id);
         }
         closeDialog();
       }}

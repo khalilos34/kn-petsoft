@@ -1,13 +1,11 @@
 "use client";
 import { usePetContext } from "@/lib/hooks";
 import { Button } from "./ui/button";
-import { checkOutPet } from "@/actions/actions";
 
 const CheckoutButton = ({ children }: { children: React.ReactNode }) => {
-  const { selectedPet } = usePetContext();
-
+  const { selectedPet, handleCheckOut } = usePetContext();
   return (
-    <form action={() => checkOutPet(selectedPet!.id)}>
+    <form action={async () => await handleCheckOut(selectedPet!.id)}>
       <Button
         className="h-10 rounded-full px-6"
         type="submit"

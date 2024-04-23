@@ -1,23 +1,15 @@
 "use server";
 
 import prisma from "@/lib/db";
+import { PetInputs } from "@/lib/types";
 import { sleep } from "@/lib/utils";
+import { Pet } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
-export const addNewPet = async (formData: FormData) => {
+export const addNewPet = async (newPet: PetInputs) => {
   try {
-    const data = {
-      name: formData.get("name") as string,
-      age: +(formData.get("age") as string),
-      ownerName: formData.get("ownerName") as string,
-      notes: formData.get("notes") as string,
-      imageUrl:
-        (formData.get("imageUrl") as string) ||
-        "https://bytegrad.com/course-assets/react-nextjs/pet-placeholder.png",
-    };
-
     await prisma.pet.create({
-      data,
+      data: newPet,
     });
 
     revalidatePath("/app", "layout");
@@ -25,8 +17,8 @@ export const addNewPet = async (formData: FormData) => {
     return { message: "could not add the pet" };
   }
 };
-export const checkOutPet = async (id: string) => {
-  await sleep(4000);
+
+export const checkOutPet = async (id: Pet["id"]) => {
   try {
     await prisma.pet.delete({ where: { id } });
     revalidatePath("/app", "layout");
@@ -35,20 +27,11 @@ export const checkOutPet = async (id: string) => {
   }
 };
 
-export const updatePet = async (petId: string, formData: FormData) => {
+export const updatePet = async (petId: Pet["id"], updatedPet: PetInputs) => {
   try {
-    const data = {
-      name: formData.get("name") as string,
-      age: +(formData.get("age") as string),
-      ownerName: formData.get("ownerName") as string,
-      notes: formData.get("notes") as string,
-      imageUrl:
-        (formData.get("imageUrl") as string) ||
-        "https://bytegrad.com/course-assets/react-nextjs/pet-placeholder.png",
-    };
     await prisma.pet.update({
       where: { id: petId },
-      data,
+      data: updatedPet,
     });
     revalidatePath("/app", "layout");
   } catch (error) {
