@@ -26,7 +26,7 @@ export default async function Layout({
         </SearchContextProvider>
         <AppFooter />
       </div>
-      <Toaster position="top-right" />
+      <Toaster position="top-right" richColors />
     </>
   );
 }
