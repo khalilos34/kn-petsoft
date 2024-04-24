@@ -33,7 +33,7 @@ export default function Home() {
             className="h-10 rounded-full px-6"
             variant="secondary"
           >
-            <Link href={"/login"}>Get Started</Link>
+            <Link href={"/login"}>Login</Link>
           </Button>
         </div>
       </div>
