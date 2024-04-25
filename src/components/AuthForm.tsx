@@ -2,7 +2,7 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 
-const AuthForm = () => {
+const AuthForm = ({ type }: { type: "Signup" | "Login" }) => {
   return (
     <form>
       <div className="space-y-1 ">
@@ -13,7 +13,7 @@ const AuthForm = () => {
         <Label htmlFor="password">Password</Label>
         <Input id="password" />
       </div>
-      <Button className="rounded-full">Login</Button>
+      <Button className="rounded-full">{type}</Button>
     </form>
   );
 };

@@ -1,7 +1,7 @@
 import { Pet } from "@prisma/client";
 import { z } from "zod";
 
-export type PetInputs = Omit<Pet, "id" | "createdAr" | "updatedAt">;
+export type PetInputs = Omit<Pet, "id" | "createdAt" | "updatedAt">;
 
 export const PetFormSchema = z.object({
   name: z
