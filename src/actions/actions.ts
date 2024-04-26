@@ -1,11 +1,37 @@
 "use server";
 
+import { signIn, signOut } from "@/lib/auth";
 import prisma from "@/lib/db";
 import { PetFormSchema, PetInputs } from "@/lib/types";
 import { Pet } from "@prisma/client";
 import { revalidatePath } from "next/cache";
+import bcrypt from "bcryptjs";
 
-export const addNewPet = async (newPet: PetInputs) => {
+//--------------------user actions-------------------
+
+export const logIn = async (formData: FormData) => {
+  await signIn("credentials", formData);
+};
+export const signUp = async (formData: FormData) => {
+  const hashedPassword = await bcrypt.hash(
+    formData.get("password") as string,
+    10,
+  );
+  await prisma.user.create({
+    data: {
+      email: formData.get("email") as string,
+      hashedPassword,
+    },
+  });
+  await signIn("credentials", formData);
+};
+export const logOut = async () => {
+  await signOut({ redirectTo: "/" });
+};
+
+//------------------------pet actions --------------------
+
+export const addNewPet = async (newPet: unknown) => {
   const validatedPet = PetFormSchema.safeParse(newPet);
   if (!validatedPet.success) {
     return { message: "Invalid pet inputs" };
