@@ -7,6 +7,7 @@ import { Pet } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import bcrypt from "bcryptjs";
 import { redirect } from "next/navigation";
+import { checkAuth } from "@/lib/server-utils";
 
 //--------------------user actions-------------------
 
@@ -33,10 +34,7 @@ export const logOut = async () => {
 //------------------------pet actions --------------------
 
 export const addNewPet = async (newPet: unknown) => {
-  const session = await auth();
-  if (!session?.user) {
-    redirect("/login");
-  }
+  const session = await checkAuth();
   const validatedPet = PetFormSchema.safeParse(newPet);
   if (!validatedPet.success) {
     return { message: "Invalid pet inputs" };
@@ -51,11 +49,20 @@ export const addNewPet = async (newPet: unknown) => {
 
     revalidatePath("/app", "layout");
   } catch (error) {
+    console.log(error);
     return { message: "could not add the pet" };
   }
 };
 
 export const checkOutPet = async (id: Pet["id"]) => {
+  const session = await checkAuth();
+  const pet = await prisma.pet.findUnique({
+    where: { id },
+  });
+  if (!pet) {
+    return { message: "Pet not found" };
+  }
+  if (pet.userId !== session.user?.id) return { message: "Not authorized" };
   try {
     await prisma.pet.delete({ where: { id } });
     revalidatePath("/app", "layout");
@@ -65,6 +72,15 @@ export const checkOutPet = async (id: Pet["id"]) => {
 };
 
 export const updatePet = async (petId: Pet["id"], updatedPet: PetInputs) => {
+  const session = await checkAuth();
+  const pet = await prisma.pet.findUnique({
+    where: { id: petId },
+  });
+  if (!pet) {
+    return { message: "Pet not found" };
+  }
+  if (pet.userId !== session.user?.id) return { message: "Not authorized" };
+
   try {
     await prisma.pet.update({
       where: { id: petId },
