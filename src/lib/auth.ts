@@ -22,6 +22,7 @@ const config = {
             email,
           },
         });
+        console.log(user);
         if (!user) {
           console.log("user not found");
           return null;

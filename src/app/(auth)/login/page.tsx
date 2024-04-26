@@ -5,7 +5,7 @@ const LoginPage = () => {
   return (
     <main>
       <h1 className="mb-5 text-center text-2xl font-medium leading-6">Login</h1>
-      <AuthForm type="Login" />
+      <AuthForm type="logIn" />
       <p className=" mt-6 text-sm text-zinc-500 ">
         No account yet ?{" "}
         <Link href={"/signup"} className="font-medium underline">
