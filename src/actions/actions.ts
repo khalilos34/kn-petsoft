@@ -1,11 +1,12 @@
 "use server";
 
-import { signIn, signOut } from "@/lib/auth";
+import { auth, signIn, signOut } from "@/lib/auth";
 import prisma from "@/lib/db";
 import { PetFormSchema, PetInputs } from "@/lib/types";
 import { Pet } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import bcrypt from "bcryptjs";
+import { redirect } from "next/navigation";
 
 //--------------------user actions-------------------
 
@@ -32,13 +33,20 @@ export const logOut = async () => {
 //------------------------pet actions --------------------
 
 export const addNewPet = async (newPet: unknown) => {
+  const session = await auth();
+  if (!session?.user) {
+    redirect("/login");
+  }
   const validatedPet = PetFormSchema.safeParse(newPet);
   if (!validatedPet.success) {
     return { message: "Invalid pet inputs" };
   }
   try {
     await prisma.pet.create({
-      data: validatedPet.data,
+      data: {
+        ...validatedPet.data,
+        user: { connect: { id: session.user?.id } },
+      },
     });
 
     revalidatePath("/app", "layout");
