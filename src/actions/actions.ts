@@ -2,7 +2,7 @@
 
 import { auth, signIn, signOut } from "@/lib/auth";
 import prisma from "@/lib/db";
-import { PetFormSchema, PetInputs } from "@/lib/types";
+import { PetFormSchema, PetInputs, authSchema } from "@/lib/types";
 import { Pet } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import bcrypt from "bcryptjs";
@@ -12,7 +12,15 @@ import { checkAuth } from "@/lib/server-utils";
 //--------------------user actions-------------------
 
 export const logIn = async (formData: FormData) => {
-  await signIn("credentials", formData);
+  const data = {
+    email: formData.get("email"),
+    password: formData.get("password"),
+  };
+  const validatedAuth = authSchema.safeParse(data);
+  if (!validatedAuth.success) {
+    return { message: "Invalid auth inputs" };
+  }
+  await signIn("credentials", validatedAuth.data);
 };
 export const signUp = async (formData: FormData) => {
   const hashedPassword = await bcrypt.hash(

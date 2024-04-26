@@ -8,11 +8,11 @@ const AuthForm = ({ type }: { type: "Signup" | "Login" }) => {
     <form action={type === "Login" ? logIn : signUp}>
       <div className="space-y-1 ">
         <Label htmlFor="email">Email</Label>
-        <Input id="email" name="email" type="email" />
+        <Input id="email" name="email" type="email" required />
       </div>
       <div className="mb-4 mt-2 space-y-1 ">
         <Label htmlFor="password">Password</Label>
-        <Input id="password" name="password" type="password" />
+        <Input id="password" name="password" type="password" required />
       </div>
       <Button className="rounded-full">{type}</Button>
     </form>
