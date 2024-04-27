@@ -46,13 +46,16 @@ const config = {
       if (isTryingToAccessApp && !isLoggedIn) {
         return false;
       }
-      if (isTryingToAccessApp && isLoggedIn) {
+      if (isTryingToAccessApp && isLoggedIn && !auth.user.hasAccess) {
+        return Response.redirect(new URL("/payment", request.nextUrl));
+      }
+      if (isTryingToAccessApp && isLoggedIn && auth.user.hasAccess) {
         return true;
       }
       if (isLoggedIn && !isTryingToAccessApp) {
         if (
           request.nextUrl.pathname.includes("/login") ||
-          request.nextUrl.pathname.includes("/signup")
+          (request.nextUrl.pathname.includes("/signup") && !auth.user.hasAccess)
         )
           return Response.redirect(new URL("/payment", request.nextUrl));
         else return true;
