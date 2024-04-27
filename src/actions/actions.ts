@@ -10,6 +10,8 @@ import { redirect } from "next/navigation";
 import { checkAuth } from "@/lib/server-utils";
 import { AuthError } from "next-auth";
 
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+
 //--------------------user actions-------------------
 
 export const logIn = async (prevState: unknown, formData: FormData) => {
@@ -127,4 +129,23 @@ export const updatePet = async (petId: Pet["id"], updatedPet: PetInputs) => {
   } catch (error) {
     return { message: "could not update the pet" };
   }
+};
+//================================STripe===============
+export const createCheckOutSession = async () => {
+  const session = await checkAuth();
+
+  const checkoutSessions = await stripe.checkout.sessions.create({
+    customer_email: session.user?.email,
+    payment_method_types: ["card"],
+    line_items: [
+      {
+        price: "price_1PAHPyGrS9vafcUnIapaAlqN",
+        quantity: 1,
+      },
+    ],
+    mode: "payment",
+    success_url: `${process.env.CANONICAL_URL}/payment?success=true`,
+    cancel_url: `${process.env.CANONICAL_URL}/payment?cancelled=true`,
+  });
+  redirect(checkoutSessions.url);
 };

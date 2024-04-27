@@ -22,7 +22,7 @@ const config = {
             email,
           },
         });
-        console.log(user);
+
         if (!user) {
           console.log("user not found");
           return null;
@@ -50,7 +50,12 @@ const config = {
         return true;
       }
       if (isLoggedIn && !isTryingToAccessApp) {
-        return Response.redirect(new URL("/app/dashboard", request.nextUrl));
+        if (
+          request.nextUrl.pathname.includes("/login") ||
+          request.nextUrl.pathname.includes("/signup")
+        )
+          return Response.redirect(new URL("/payment", request.nextUrl));
+        else return true;
       }
       if (!isTryingToAccessApp && !isLoggedIn) {
         return true;
@@ -60,12 +65,14 @@ const config = {
     jwt: ({ token, user }) => {
       if (user) {
         token.userId = user.id;
+        token.hasAccess = user.hasAccess;
       }
       return token;
     },
     session: ({ session, token }) => {
       if (session.user) {
         session.user.id = token.userId;
+        session.user.hasAccess = token.hasAccess;
       }
       return session;
     },
