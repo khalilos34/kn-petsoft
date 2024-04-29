@@ -65,10 +65,19 @@ const config = {
       }
       return false;
     },
-    jwt: ({ token, user }) => {
+    jwt: async ({ token, user, trigger }) => {
       if (user) {
         token.userId = user.id;
+        token.email = user.email!;
         token.hasAccess = user.hasAccess;
+      }
+      if (trigger === "update") {
+        const user = await prisma.user.findUnique({
+          where: { email: token.email },
+        });
+        if (user) {
+          token.hasAccess = user.hasAccess;
+        }
       }
       return token;
     },
